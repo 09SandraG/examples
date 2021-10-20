@@ -2,7 +2,7 @@ function [phi_approx, phi_exacta,x,y,z,tiempo] = Poisson3D(m,n,p,phi,f)
 % Función que calcula una aproximación a la solución de la ecuación de
 % Possion en 2D.
 %
-%phi_xx + phi_yy + phi_zz = -f
+%phi_xx + phi_yy + phi_zz = -fhjvg
 %
 %Se ensamblan las matrices de Diferencias para resolver el sistema lineal.
 %

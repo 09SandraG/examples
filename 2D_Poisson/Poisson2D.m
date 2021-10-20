@@ -23,7 +23,6 @@ function [phi_approx, phi_exacta,x,y,tiempo] = Poisson2D(m,n,phi,f)
 %
 % Inicializamos las variables
 close all                          % Cierra ventanas de figuras abiertas
-m=11; n=11;
 x = linspace(0,1,m);              % Se crea la discretización en x
 y = linspace(0,1,n);              % Se crea la discretización en y
 h = x(2) - x(1);                   % Se calcula h
