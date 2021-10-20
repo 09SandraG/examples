@@ -1,4 +1,4 @@
-function [phi_approx, phi_exacta,x,y] = Poisson2D(m,n,phi,f)
+function [phi_approx, phi_exacta,x,y,tiempo] = Poisson2D(m,n,phi,f)
 % Función que calcula una aproximación a la solución de la ecuación de
 % Possion en 2D.
 %
@@ -23,6 +23,7 @@ function [phi_approx, phi_exacta,x,y] = Poisson2D(m,n,phi,f)
 %
 % Inicializamos las variables
 close all                          % Cierra ventanas de figuras abiertas
+m=11; n=11;
 x = linspace(0,1,m);              % Se crea la discretización en x
 y = linspace(0,1,n);              % Se crea la discretización en y
 h = x(2) - x(1);                   % Se calcula h
@@ -68,14 +69,27 @@ for j = 2:m-1
 end
 for i=2:m-1
     for j = 2:n-1
-        temp = i+j-3+2*(i-2);% Se cambia el valor de temp.
+        temp = i+j-3+(n-3)*(i-2);% Se cambia el valor de temp.
         %disp(temp)
         rhs(temp) = rhs(temp) - h^2*f(x(i,j),y(i,j));% Se agrega la condicion inicial al
     end
 end
 
-% Resolvemos el sistema lineal
-u = A\rhs;
+%%%%% Resolvemos el sistema lineal %%%%%%%%%%%%%%
+%tStart = cputime;
+%u = A\rhs;                        % Utiliza mldivide para resolver el sistema
+%tiempo = cputime - tStart;
+
+%tStart = cputime;                 %% Inicia método LU %%%%%%%
+%[L,U,P] = lu(A);                  % Factorizamos la matriz en una triangular inferior y una superior
+%v = L\(P*rhs);                    % Resolvemos la matriz inferior
+%u = U\v;                          % Resolvemos la matriz superior a partir del resultado anterior
+%tiempo = cputime - tStart;
+
+tStart = cputime;                 %% Inicia método Cholesky %%%%%%%
+R = chol(A);                      % Factorizamos la matriz en una triangular inferior
+u = R\(R'\rhs);                   % Resolvemos 
+tiempo = cputime - tStart;
 %disp(u)
 
 % Guardamos la solución

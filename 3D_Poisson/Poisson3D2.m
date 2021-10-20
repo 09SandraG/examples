@@ -22,6 +22,7 @@ function [phi_approx,phi_exacta,x,y,z] = Poisson3D2(m1,m2,m3,phi,f)
 %          [phi_approx,phi_exacta,x,y,z] = Poisson3D2(11,11,11,@phi,@f);
 % Inicializamos las variables
 close all
+m1=11; m2=11; m3=11;
 x = linspace(0,1,m1)';                  % Se crea la discretizacion en x.
 y = linspace(0,1,m2)';                  % Se crea la discretizacion en y.
 z = linspace(0,1,m3)';                  % Se crea la discretizacion en z.

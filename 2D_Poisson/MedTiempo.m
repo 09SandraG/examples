@@ -5,8 +5,8 @@ tx = zeros(n,1);
 t = zeros(n,1);
 for i = 1:n
     m = 10*i;
-    t1t = @() Poisson2D2(m,m,@phi,@f);
-    t(i) = timeit(t1t);
+    [phi_approx,phi_exacta,x,y,tiempo] = Poisson2D(m,m,@phi,@f);
+    t(i) = tiempo;
     tx(i) = m;
 end
 
@@ -14,4 +14,6 @@ end
 %subplot(1,3,3)
 plot(tx,t);
 title('Tiempo de ejecucion');
+xlabel('tamaño de la malla');
+ylabel('segundos');
 end
