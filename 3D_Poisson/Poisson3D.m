@@ -59,7 +59,8 @@ for i = 1:(n-2)*(m-2):(m-2)*(n-2)*(p-2)
     temp = temp + 1;
 end
 %disp(A)                                 % Imprimimos A en pantalla.
-%disp(x)
+%d = eig(A);
+%disp(d)
 %disp(x(1,2))
 %disp(x(2,1))
 
@@ -99,12 +100,22 @@ for i=2:m-1
     end
 end
 
-% Resolvemos el sistema lineal
+%%%%% Resolvemos el sistema lineal %%%%%%%%%%%%%%
 tStart = cputime;
-u = A\rhs;
+u = A\rhs;                        % Utiliza mldivide para resolver el sistema
 tiempo = cputime - tStart;
-%disp(u)
 
+%tStart = cputime;                 %% Inicia método LU %%%%%%%
+%[L,U,P] = lu(A);                  % Factorizamos la matriz en una triangular inferior y una superior
+%v = L\(P*rhs);                    % Resolvemos la matriz inferior
+%u = U\v;                          % Resolvemos la matriz superior a partir del resultado anterior
+%tiempo = cputime - tStart;
+
+%tStart = cputime;                 %% Inicia método Cholesky %%%%%%%
+%R = chol(A);                      % Factorizamos la matriz en una triangular inferior
+%u = R\(R'\rhs);                   % Resolvemos 
+%tiempo = cputime - tStart;
+%disp(u)
 % Guardamos la solución
 utemp = reshape(u,m-2,n-2,p-2);        % Cambiamos de vector a matriz
 for i = 1:m

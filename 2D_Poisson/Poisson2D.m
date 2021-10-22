@@ -19,7 +19,7 @@ function [phi_approx, phi_exacta,x,y,tiempo] = Poisson2D(m,n,phi,f)
 %   y            Matriz    Matriz de coordenadas y de la malla.
 %
 %Ejemplo de uso:
-% [phi_aprox,phi_exacta,x,y] = Poisson2D(11,@phi,@f);
+% [phi_aprox,phi_exacta,x,y] = Poisson2D(11,11,@phi,@f);
 %
 % Inicializamos las variables
 close all                          % Cierra ventanas de figuras abiertas
@@ -85,11 +85,16 @@ end
 %u = U\v;                          % Resolvemos la matriz superior a partir del resultado anterior
 %tiempo = cputime - tStart;
 
-tStart = cputime;                 %% Inicia método Cholesky %%%%%%%
-R = chol(A);                      % Factorizamos la matriz en una triangular inferior
-u = R\(R'\rhs);                   % Resolvemos 
-tiempo = cputime - tStart;
+%tStart = cputime;                 %% Inicia método Cholesky %%%%%%%
+%R = chol(A);                      % Factorizamos la matriz en una triangular inferior
+%u = R\(R'\rhs);                   % Resolvemos 
+%tiempo = cputime - tStart;
 %disp(u)
+
+tStart = cputime;
+x0 = zeros((m-2)*(n-2),1);        % Vector inicial.
+u = gaussSeidel(A,rhs,x0,m-2,0.0006);
+tiempo = cputime - tStart;
 
 % Guardamos la solución
 utemp = reshape(u,n-2,m-2);        % Cambiamos de vector a matriz
