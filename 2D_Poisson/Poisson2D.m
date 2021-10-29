@@ -47,6 +47,7 @@ for i=1:(n-2):(m-2)*(n-2)          % Se recorre de 1 a (m-2)*(m-2) dando salida
     temp = temp + 1;               % Se hace un incremento en temp.
 end
 %disp(A)                                 % Imprimimos A en pantalla.
+%spy(A)
 %disp(x)
 %disp(x(1,2))
 %disp(x(2,1))
@@ -74,6 +75,19 @@ for i=2:m-1
     end
 end
 
+%%%%%%%%%% Características de la matriz %%%%%%%%%%%
+C = cond(A);
+fprintf('El número de condición es: ');
+disp(C)
+
+addpath('C:\Users\Dell\Documents\Curso_Computo_Cientifico\Poisson\examples\caracteristicas_Matrices');
+isdom = IsDiagDom(A);
+if isdom == 0
+    disp (['Matrix A is not diagonally-dominant']);
+elseif isdom == 1
+        disp (['Matrix A is diagonally-dominant']); 
+end
+
 %%%%% Resolvemos el sistema lineal %%%%%%%%%%%%%%
 %tStart = cputime;
 %u = A\rhs;                        % Utiliza mldivide para resolver el sistema
@@ -91,11 +105,19 @@ end
 %tiempo = cputime - tStart;
 %disp(u)
 
+addpath('C:\Users\Dell\Documents\Curso_Computo_Cientifico\Poisson\examples\metodos_iterativos');
 tStart = cputime;
 x0 = zeros((m-2)*(n-2),1);        % Vector inicial.
-u = gaussSeidel(A,rhs,x0,m-2,0.0006);
+u = GaussSeidel(A,rhs,x0,(m-2)*(n-2),0.0001,100);  %% Métdo implementado por mí
+%u = Gauss_Siedel(A,rhs,x0,0.0001);   %% Implementación descargada de internet(https://www.mathworks.com/matlabcentral/fileexchange/73488-gauss-seidel-iterative-method)
 tiempo = cputime - tStart;
 
+%tStart = cputime;
+%x0 = zeros((m-2)*(n-2),1);        % Vector inicial.
+%u = Jacobi(A,rhs,x0,(m-2)*(n-2),0.000001,10);
+%tiempo = cputime - tStart;
+
+%disp(u) 
 % Guardamos la solución
 utemp = reshape(u,n-2,m-2);        % Cambiamos de vector a matriz
 for i = 1:n

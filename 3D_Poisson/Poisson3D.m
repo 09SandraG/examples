@@ -100,6 +100,19 @@ for i=2:m-1
     end
 end
 
+%%%%%%%%%% Características de la matriz %%%%%%%%%%%
+C = cond(A);
+fprintf('El número de condición es: ');
+disp(C)
+
+addpath('C:\Users\Dell\Documents\Curso_Computo_Cientifico\Poisson\examples\caracteristicas_Matrices');
+isdom = IsDiagDom(A);
+if isdom == 0
+    disp (['Matrix A is not diagonally-dominant']);
+elseif isdom == 1
+        disp (['Matrix A is diagonally-dominant']); 
+end
+
 %%%%% Resolvemos el sistema lineal %%%%%%%%%%%%%%
 tStart = cputime;
 u = A\rhs;                        % Utiliza mldivide para resolver el sistema
@@ -116,6 +129,19 @@ tiempo = cputime - tStart;
 %u = R\(R'\rhs);                   % Resolvemos 
 %tiempo = cputime - tStart;
 %disp(u)
+
+addpath('C:\Users\Dell\Documents\Curso_Computo_Cientifico\Poisson\examples\metodos_iterativos');
+tStart = cputime;
+x0 = zeros((m-2)*(n-2)*(p-2),1);        % Vector inicial.
+u = GaussSeidel(A,rhs,x0,(m-2)*(n-2)*(p-2),0.000001,50);
+tiempo = cputime - tStart;
+
+%tStart = cputime;
+%x0 = zeros((m-2)*(n-2),1);        % Vector inicial.
+%u = Jacobi(A,rhs,x0,(m-2)*(n-2)*(p-2),0.000001,10);
+%tiempo = cputime - tStart;
+
+
 % Guardamos la solución
 utemp = reshape(u,m-2,n-2,p-2);        % Cambiamos de vector a matriz
 for i = 1:m

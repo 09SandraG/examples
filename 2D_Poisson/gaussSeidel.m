@@ -13,13 +13,13 @@ function [xk] = gaussSeidel(A,b,x0,n,tol)
 %ER  :norma de la diferencia de dos iteraciones consecutivas 
 %xk  :k-esima iteracion
 
-fprintf('metodo de Gauss- Seidel:\n\n');
+%fprintf('metodo de Gauss- Seidel:\n\n');
 s='x';
-fprintf(' i');
-for i=1:n
-    fprintf('%12.1s %.0f',s,i);
-end
-fprintf('      ER\n');
+%fprintf(' i');
+%for i=1:n
+%    fprintf('%12.1s %.0f',s,i);
+%end
+%fprintf('      ER\n');
 ER=2; con =0;
 while ER>tol
     con=con+1;
@@ -29,7 +29,7 @@ while ER>tol
             ja= ja +A(i,j)*xk(j);
         end
         for j=i+1:n
-        jd= jd +A(i,j)*x0(j);
+            jd= jd +A(i,j)*x0(j);
         end
         xk(i)=(b(i)-ja-jd)/A(i,i);
     end
@@ -38,14 +38,17 @@ while ER>tol
         sum= sum +(xk(i)-x0(i))*(xk(i)-x0(i));
     end
     ER= sqrt(sum);
-    fprintf('%3.0f',con);
-    for i=1:n
-        fprintf('%15.6f',xk(i));
-    end
-    fprintf('%12.3e\n',ER);
+ %   fprintf('%3.0f',con);
+ %   for i=1:n
+ %       fprintf('%15.6f',xk(i));
+ %   end
+ %  fprintf('%12.3e\n',ER);
     x0=xk;
     if con > 100
         fprintf('se excedio limite de iteraciones');
         ER=0;
     end
+end
+fprintf('%12.3e\n',ER);
+disp(con)
 end
