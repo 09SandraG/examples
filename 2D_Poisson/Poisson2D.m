@@ -76,28 +76,28 @@ for i=2:m-1
 end
 
 %%%%%%%%%% Características de la matriz %%%%%%%%%%%
-C = cond(A);
-fprintf('El número de condición es: ');
-disp(C)
+%C = cond(A);
+%fprintf('El número de condición es: ');
+%disp(C)
 
-addpath('C:\Users\Dell\Documents\Curso_Computo_Cientifico\Poisson\examples\caracteristicas_Matrices');
-isdom = IsDiagDom(A);
-if isdom == 0
-    disp (['Matrix A is not diagonally-dominant']);
-elseif isdom == 1
-        disp (['Matrix A is diagonally-dominant']); 
-end
+%addpath('C:\Users\Dell\Documents\Curso_Computo_Cientifico\Poisson\examples\caracteristicas_Matrices');
+%isdom = IsDiagDom(A);
+%if isdom == 0
+%    disp ('Matrix A is not diagonally-dominant');
+%elseif isdom == 1
+%        disp ('Matrix A is diagonally-dominant'); 
+%end
 
 %%%%% Resolvemos el sistema lineal %%%%%%%%%%%%%%
 %tStart = cputime;
 %u = A\rhs;                        % Utiliza mldivide para resolver el sistema
 %tiempo = cputime - tStart;
 
-%tStart = cputime;                 %% Inicia método LU %%%%%%%
-%[L,U,P] = lu(A);                  % Factorizamos la matriz en una triangular inferior y una superior
-%v = L\(P*rhs);                    % Resolvemos la matriz inferior
-%u = U\v;                          % Resolvemos la matriz superior a partir del resultado anterior
-%tiempo = cputime - tStart;
+tStart = cputime;                 %% Inicia método LU %%%%%%%
+[L,U,P] = lu(A);                  % Factorizamos la matriz en una triangular inferior y una superior
+v = L\(P*rhs);                    % Resolvemos la matriz inferior
+u = U\v;                          % Resolvemos la matriz superior a partir del resultado anterior
+tiempo = cputime - tStart;
 
 %tStart = cputime;                 %% Inicia método Cholesky %%%%%%%
 %R = chol(A);                      % Factorizamos la matriz en una triangular inferior
@@ -105,20 +105,20 @@ end
 %tiempo = cputime - tStart;
 %disp(u)
 
-addpath('C:\Users\Dell\Documents\Curso_Computo_Cientifico\Poisson\examples\metodos_iterativos');
-tStart = cputime;
-x0 = zeros((m-2)*(n-2),1);        % Vector inicial.
-u = GaussSeidel(A,rhs,x0,(m-2)*(n-2),0.0001,100);  %% Métdo implementado por mí
-%u = Gauss_Siedel(A,rhs,x0,0.0001);   %% Implementación descargada de internet(https://www.mathworks.com/matlabcentral/fileexchange/73488-gauss-seidel-iterative-method)
-tiempo = cputime - tStart;
+%addpath('C:\Users\Dell\Documents\Curso_Computo_Cientifico\Poisson\examples\metodos_iterativos');
+%tStart = cputime;
+%x0 = zeros((m-2)*(n-2),1);        % Vector inicial.
+%u = GaussSeidel(A,rhs,x0,(m-2)*(n-2),0.000001,500);  %% Método implementado por mí
+%u = Gauss_Siedel(A,rhs,x0,0.000001);   %% Implementación descargada de internet(https://www.mathworks.com/matlabcentral/fileexchange/73488-gauss-seidel-iterative-method)
+%tiempo = cputime - tStart;
 
 %tStart = cputime;
 %x0 = zeros((m-2)*(n-2),1);        % Vector inicial.
-%u = Jacobi(A,rhs,x0,(m-2)*(n-2),0.000001,10);
+%u = Jacobi(A,rhs,x0,(m-2)*(n-2),0.000001,500);
 %tiempo = cputime - tStart;
 
 %disp(u) 
-% Guardamos la solución
+%% Guardamos la solución
 utemp = reshape(u,n-2,m-2);        % Cambiamos de vector a matriz
 for i = 1:n
     phi_approx(i,1) = phi(x(i,1),y(i,1));% Se agrega la condicion de frontera
@@ -143,15 +143,15 @@ phi_approx(2:(n-1),2:(m-1)) = utemp;       % Se completa la matriz de phi_approx
 phi_exacta = phi(x,y);
 %disp(phi_exacta)
 
-% Graficamos la solución
+%% Graficamos la solución
 % scrsz = get(groot,'ScreenSize'); % Se obtienen los limites de la
 % figure('OuterPosition',[1 1 scrsz(3) scrsz(4)]);% Se crea la figura del
 % tamaño de
-figure                             
-subplot(1,2,1)                     % Se divide la grafica en 2.
-surf(x,y,phi_approx);              % Se grafica la solucion aproximada.
-title('Aproximacion')              % Se agrega titulo a la grafica
-subplot(1,2,2)                     % Se usa la otra parte de la grafica.
-surf(x,y,phi_exacta);              % Se grafica la solucion exacta.
-title('Solucion exacta')           % Se agrega titulo a la grafica
+%figure                             
+%subplot(1,2,1)                     % Se divide la grafica en 2.
+%surf(x,y,phi_approx);              % Se grafica la solucion aproximada.
+%title('Aproximacion')              % Se agrega titulo a la grafica
+%subplot(1,2,2)                     % Se usa la otra parte de la grafica.
+%surf(x,y,phi_exacta);              % Se grafica la solucion exacta.
+%title('Solucion exacta')           % Se agrega titulo a la grafica
 end

@@ -34,15 +34,16 @@ while (k<=maxit) && (err > tol)
         x_approx(i) = (-sum1 + b(i))/A(i,i);
     end
     %%% El error se calcula con la norma euclideana
-    fprintf('%3.0f',k);
+    %fprintf('%3.0f',k);
     sum = 0;
     for i = 1:n
         sum = sum + (x_approx(i) - x0(i))*(x_approx(i) - x0(i));
     end
     err = sqrt(sum);
-    fprintf('%12.3e\n',err);
+    %fprintf('%12.3e\n',err);
     k=k+1;
     x0 = x_approx;
 end
-disp(k)
+fprintf('Despues de %3.0f iteraciones el error de la aproximación es: %3.6e\n',k-1,err);
+%disp(k)
 end

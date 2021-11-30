@@ -49,6 +49,6 @@ while ER>tol
         ER=0;
     end
 end
-fprintf('%12.3e\n',ER);
-disp(con)
+fprintf('Error: %12.3e\n',ER);
+fprintf('Número de iteraciones: %3.0f \n',con);
 end

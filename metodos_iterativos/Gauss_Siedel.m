@@ -38,5 +38,11 @@ while sum(abs(err) >= tol) ~= zeros(na,1)
 end
 fprintf('The final answer obtained after %g iterations is  \n', k);
 x = x(:,end);
+sumaaa = 0;
+    for i = 1:nb
+        sumaaa = sumaaa + (err(i))*(err(i));
+    end
+    er = sqrt(sumaaa);
+fprintf('Error: %12.3e\n',er);
 %disp(err)
 end

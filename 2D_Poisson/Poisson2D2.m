@@ -1,4 +1,4 @@
-function [phi_approx,phi_exacta,x,y] = Poisson2D2(m,n,phi,f)
+function [phi_approx,phi_exacta,x,y,tiempo] = Poisson2D2(m,n,phi,f)
 % funcion que calcula una aproximacion a la solucon de la ecuacion de
 % Poisson en 2D.
 %
@@ -40,9 +40,10 @@ for i = 1:n
     phi_approx(1,i) = phi(x(1,i),y(1,i)); % Se agrega la condicion de forntera izquierda.
     phi_approx(m,i) = phi(x(m,i),y(m,i)); % Se agrega la condicion de forntera derecha.
 end
-
+cont11 = 1;
+tStart = cputime;
 % Llenamos la matriz usando Diferencias Finitas
-while err >= tol
+while (err >= tol) && (cont11 < 1500)
     err = 0;
     for i = 2:m-1
         for j = 2:n-1                   % Se utilizan Diferencias centradas
@@ -51,20 +52,23 @@ while err >= tol
             phi_approx(i,j) = t;           % Se asigna el valor de phi_approx.
         end
     end
+    cont11=cont11+1;
 end
+tiempo = cputime - tStart;
+
 
 % Calculamos la solucion exacta
 phi_exacta = phi(x,y);
-
+fprintf('Despues de %3.0f iteraciones el error de la aproximación es: %3.6e\n',cont11,err)
 % Graficamos la solucion
 % scrsz = get(groot,'ScreenSiza');          % Se obtienen los limites de la
 % figure('OuterPosition',[1 1 scrsz(3) scrsz(4)]); % Se crea una figura del
 % tamaño de 
-figure                                 
-subplot(1,2,1)                        % Se divide la grafica en 2.
-surf(x,y,phi_approx);                 % Se grafica la solucion aproximada.
-title('Aproximacion')                 % Se agrega el titulo de la grafica.
-subplot(1,2,2)                        % Se usa la otra parte de la grafica.
-surf(x,y,phi_exacta);                 % Se grafica la solucion exacta.
-title('Solucion exacta')              % Se agrega titulo a la grafica.
+%figure                                 
+%subplot(1,2,1)                        % Se divide la grafica en 2.
+%surf(x,y,phi_approx);                 % Se grafica la solucion aproximada.
+%title('Aproximacion')                 % Se agrega el titulo de la grafica.
+%subplot(1,2,2)                        % Se usa la otra parte de la grafica.
+%surf(x,y,phi_exacta);                 % Se grafica la solucion exacta.
+%title('Solucion exacta')              % Se agrega titulo a la grafica.
 end

@@ -1,4 +1,4 @@
-function [phi_approx,phi_exacta,x,y,z] = Poisson3D2(m1,m2,m3,phi,f)
+function [phi_approx,phi_exacta,x,y,z,tiempo] = Poisson3D2(m1,m2,m3,phi,f)
 % funcion que calcula una aproximacion a la solucon de la ecuacion de
 % Poisson en 2D.
 %
@@ -52,10 +52,10 @@ for i = 1:m3
     phi_approx(1,m2,i) = phi(x(1,m2,i),y(1,m2,i),z(1,m2,i)); % Se agrega la condicion de forntera izquierda.
     phi_approx(m1,m2,i) = phi(x(m1,m2,i),y(m1,m2,i),z(m1,m2,i)); % Se agrega la condicion de forntera derecha.
 end
-
-
+cont11=1;
+tStart = cputime; 
 % Llenamos la matriz usando Diferencias Finitas
-while err >= tol
+while (err >= tol) && (cont11<500)
     err = 0;
     for i = 2:m1-1
         for j = 2:m2-1                   % Se utilizan Diferencias centradas
@@ -66,11 +66,13 @@ while err >= tol
             end
         end
     end
+    cont11=cont11+1;
 end
+tiempo = cputime - tStart;
 
 % Calculamos la solucion exacta
 phi_exacta = phi(x,y,z);
-
+fprintf('Despues de %3.0f iteraciones el error de la aproximación es: %3.6e\n',k-1,err);
 % GRaficamos la solucion
 % scrsz = get(groot,'ScreenSiza');          % Se obtienen los limites de la
 % figure('OuterPosition',[1 1 scrsz(3) scrsz(4)]); % Se crea una figura del

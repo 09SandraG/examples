@@ -5,14 +5,14 @@ tx = zeros(n,1);
 t = zeros(n,1);
 for i = 1:n
     m = 10*i;
-    [phi_approx, phi_exacta,x,y,z,tiempo] = Poisson3D2(m,m,m,@phi,@f);
+    [c_approx,x,y,tiempo] = ProliferacionInvasion2D(m,m,10,@f,@g,0.2);
     t(i) = tiempo;
     tx(i) = m;
 end
 
 %% Grafica del tiempo de ejecucion
 plot(tx,t);
-title('Tiempo de ejecucion de la ecuación de Poisson 3D');
+title('Tiempo de ejecucion del modelo Proliferación-invasión 2D');
 xlabel('tamaño de la malla por lado');
 ylabel('segundos');
 end

@@ -59,6 +59,7 @@ for i = 1:(n-2)*(m-2):(m-2)*(n-2)*(p-2)
     temp = temp + 1;
 end
 %disp(A)                                 % Imprimimos A en pantalla.
+%spy(A)
 %d = eig(A);
 %disp(d)
 %disp(x(1,2))
@@ -101,28 +102,28 @@ for i=2:m-1
 end
 
 %%%%%%%%%% Características de la matriz %%%%%%%%%%%
-C = cond(A);
-fprintf('El número de condición es: ');
-disp(C)
+%C = cond(A);
+%fprintf('El número de condición es: ');
+%disp(C)
 
-addpath('C:\Users\Dell\Documents\Curso_Computo_Cientifico\Poisson\examples\caracteristicas_Matrices');
-isdom = IsDiagDom(A);
-if isdom == 0
-    disp (['Matrix A is not diagonally-dominant']);
-elseif isdom == 1
-        disp (['Matrix A is diagonally-dominant']); 
-end
+%addpath('C:\Users\Dell\Documents\Curso_Computo_Cientifico\Poisson\examples\caracteristicas_Matrices');
+%isdom = IsDiagDom(A);
+%if isdom == 0
+%    disp (['Matrix A is not diagonally-dominant']);
+%elseif isdom == 1
+%        disp (['Matrix A is diagonally-dominant']); 
+%end
 
 %%%%% Resolvemos el sistema lineal %%%%%%%%%%%%%%
-tStart = cputime;
-u = A\rhs;                        % Utiliza mldivide para resolver el sistema
-tiempo = cputime - tStart;
-
-%tStart = cputime;                 %% Inicia método LU %%%%%%%
-%[L,U,P] = lu(A);                  % Factorizamos la matriz en una triangular inferior y una superior
-%v = L\(P*rhs);                    % Resolvemos la matriz inferior
-%u = U\v;                          % Resolvemos la matriz superior a partir del resultado anterior
+%tStart = cputime;
+%u = A\rhs;                        % Utiliza mldivide para resolver el sistema
 %tiempo = cputime - tStart;
+
+tStart = cputime;                 %% Inicia método LU %%%%%%%
+[L,U,P] = lu(A);                  % Factorizamos la matriz en una triangular inferior y una superior
+v = L\(P*rhs);                    % Resolvemos la matriz inferior
+u = U\v;                          % Resolvemos la matriz superior a partir del resultado anterior
+tiempo = cputime - tStart;
 
 %tStart = cputime;                 %% Inicia método Cholesky %%%%%%%
 %R = chol(A);                      % Factorizamos la matriz en una triangular inferior
@@ -130,11 +131,11 @@ tiempo = cputime - tStart;
 %tiempo = cputime - tStart;
 %disp(u)
 
-addpath('C:\Users\Dell\Documents\Curso_Computo_Cientifico\Poisson\examples\metodos_iterativos');
-tStart = cputime;
-x0 = zeros((m-2)*(n-2)*(p-2),1);        % Vector inicial.
-u = GaussSeidel(A,rhs,x0,(m-2)*(n-2)*(p-2),0.000001,50);
-tiempo = cputime - tStart;
+%addpath('C:\Users\Dell\Documents\Curso_Computo_Cientifico\Poisson\examples\metodos_iterativos');
+%tStart = cputime;
+%x0 = zeros((m-2)*(n-2)*(p-2),1);        % Vector inicial.
+%u = GaussSeidel(A,rhs,x0,(m-2)*(n-2)*(p-2),0.000001,50);
+%tiempo = cputime - tStart;
 
 %tStart = cputime;
 %x0 = zeros((m-2)*(n-2),1);        % Vector inicial.
