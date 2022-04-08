@@ -1,4 +1,4 @@
-function [x_approx] = GaussSeidel(A,b,x0,n,tol,maxit)
+function [x_approx,num_iters,err] = GaussSeidel(A,b,x0,n,tol,maxit)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Métodod iterativo de Gauss-Seidel        %%
 % Modificado por Sandra García. 28/10/2021 %%
@@ -47,5 +47,6 @@ while (k<=maxit) && (err > tol)
     x0 = x_approx;
 end
 fprintf('Despues de %3.0f iteraciones el error de la aproximación es: %3.6e\n',k-1,err);
+num_iters = k-1;
 %disp(k)
 end

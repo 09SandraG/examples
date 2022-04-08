@@ -19,7 +19,7 @@ function [phi_approx, phi_exacta,x,y,tiempo] = Poisson2D(m,n,phi,f)
 %   y            Matriz    Matriz de coordenadas y de la malla.
 %
 %Ejemplo de uso:
-% [phi_aprox,phi_exacta,x,y] = Poisson2D(11,11,@phi,@f);
+% [phi_aprox,phi_exacta,x,y,tiempo] = Poisson2D(11,11,@phi,@f);
 %
 % Inicializamos las variables
 close all                          % Cierra ventanas de figuras abiertas
@@ -93,11 +93,11 @@ end
 %u = A\rhs;                        % Utiliza mldivide para resolver el sistema
 %tiempo = cputime - tStart;
 
-tStart = cputime;                 %% Inicia método LU %%%%%%%
-[L,U,P] = lu(A);                  % Factorizamos la matriz en una triangular inferior y una superior
-v = L\(P*rhs);                    % Resolvemos la matriz inferior
-u = U\v;                          % Resolvemos la matriz superior a partir del resultado anterior
-tiempo = cputime - tStart;
+%tStart = cputime;                 %% Inicia método LU %%%%%%%
+%[L,U,P] = lu(A);                  % Factorizamos la matriz en una triangular inferior y una superior
+%v = L\(P*rhs);                    % Resolvemos la matriz inferior
+%u = U\v;                          % Resolvemos la matriz superior a partir del resultado anterior
+%tiempo = cputime - tStart;
 
 %tStart = cputime;                 %% Inicia método Cholesky %%%%%%%
 %R = chol(A);                      % Factorizamos la matriz en una triangular inferior
@@ -116,6 +116,10 @@ tiempo = cputime - tStart;
 %x0 = zeros((m-2)*(n-2),1);        % Vector inicial.
 %u = Jacobi(A,rhs,x0,(m-2)*(n-2),0.000001,500);
 %tiempo = cputime - tStart;
+
+tStart = cputime;
+u = pcg(A,rhs,1e-6,500);
+tiempo = cputime - tStart;
 
 %disp(u) 
 %% Guardamos la solución

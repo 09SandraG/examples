@@ -1,4 +1,4 @@
-function [phi_approx,phi_exacta,x,y,z,tiempo] = Poisson3D2(m1,m2,m3,phi,f)
+function [phi_approx,phi_exacta,x,y,z,tiempo,cont11] = Poisson3D2(m1,m2,m3,phi,f)
 % funcion que calcula una aproximacion a la solucon de la ecuacion de
 % Poisson en 2D.
 %
@@ -20,9 +20,9 @@ function [phi_approx,phi_exacta,x,y,z,tiempo] = Poisson3D2(m1,m2,m3,phi,f)
 %
 % Ejemplo de uso:
 %          [phi_approx,phi_exacta,x,y,z] = Poisson3D2(11,11,11,@phi,@f);
-% Inicializamos las variables
+%% Inicializamos las variables
 close all
-m1=11; m2=11; m3=11;
+%m1=11; m2=11; m3=11;
 x = linspace(0,1,m1)';                  % Se crea la discretizacion en x.
 y = linspace(0,1,m2)';                  % Se crea la discretizacion en y.
 z = linspace(0,1,m3)';                  % Se crea la discretizacion en z.
@@ -30,10 +30,10 @@ h = x(2) - x(1);                      % Se calcula h.
 [x,y,z] = meshgrid(x,y,z);                % Creamos la malla completa. 
 phi_approx = zeros(m1,m2,m3);              % Se inicializa la phi_approx.
 err = 1;                              % Se incializa err con 1.
-tol = sqrt(eps);                      % Se impone una tolerancia para err.
-%tol = 0.0006;
+%tol = sqrt(eps);                      % Se impone una tolerancia para err.
+tol = 0.000001;
 
-% Agregamos condiciones de frontera
+%% Agregamos condiciones de frontera
 for i = 1:m1
     phi_approx(i,1,1) = phi(x(i,1,1),y(i,1,1),z(i,1,1)); % Se agrega la condicion de forntera inferior.
     phi_approx(i,m2,1) = phi(x(i,m2,1),y(i,m2,1),z(i,m2,1)); % Se agrega la condicion de forntera superior.
@@ -54,8 +54,16 @@ for i = 1:m3
 end
 cont11=1;
 tStart = cputime; 
-% Llenamos la matriz usando Diferencias Finitas
-while (err >= tol) && (cont11<500)
+
+%% Llenamos la matriz usando Diferencias Finitas 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% A P L I C A C I Ó N    D E L    M É T O D O    D E  %%%
+%%% G A U S S - S E I D E L   A L    P R O B L E M A    %%%
+%%% D E   P O I S S O N    E N    3 D                   %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%while (err >= tol) && (cont11 < 500)
+while (err >=tol)
     err = 0;
     for i = 2:m1-1
         for j = 2:m2-1                   % Se utilizan Diferencias centradas
@@ -70,10 +78,11 @@ while (err >= tol) && (cont11<500)
 end
 tiempo = cputime - tStart;
 
-% Calculamos la solucion exacta
+%% Calculamos la solucion exacta
 phi_exacta = phi(x,y,z);
-fprintf('Despues de %3.0f iteraciones el error de la aproximación es: %3.6e\n',k-1,err);
-% GRaficamos la solucion
+%fprintf('Despues de %3.0f iteraciones el error de la aproximación es: %3.6e\n',cont11,err);
+
+%% GRaficamos la solucion
 % scrsz = get(groot,'ScreenSiza');          % Se obtienen los limites de la
 % figure('OuterPosition',[1 1 scrsz(3) scrsz(4)]); % Se crea una figura del
 % tamaño de 

@@ -21,7 +21,7 @@ function [phi_approx, phi_exacta,x,y,z,tiempo] = Poisson3D(m,n,p,phi,f)
 %Ejemplo de uso:
 % [phi_aprox,phi_exacta,x,y,z,tiempo] = Poisson3D(11,11,11,@phi,@f);
 %
-% Inicializamos las variables
+%% Inicializamos las variables
 close all                          % Cierra ventanas de figuras abiertas
 x = linspace(0,1,m);              % Se crea la discretización en x
 y = linspace(0,1,n);              % Se crea la discretización en y
@@ -33,7 +33,7 @@ A = zeros((m-2)*(n-2)*(p-2),(m-2)*(n-2)*(p-2));% Se inicializa A con ceros.
 rhs = zeros((m-2)*(n-2)*(p-2),1);        % Se inicializa rhs con ceros.
 phi_approx = zeros(n,m,p);           % Se inicializa phi_approx
 
-% Ensamblamos la Matriz A
+%% Ensamblamos la Matriz A
 dB = diag(4*ones(1,(n-2)));        % Hacemos una matriz diagonal.
 dBp1 = diag(1*ones(1,(n-2)-1),1);  % Creamos la matriz diagonal superior.
 dBm1 = diag(1*ones(1,(n-2)-1),-1); % Creamos la matriz diagonal inferior.
@@ -65,7 +65,7 @@ end
 %disp(x(1,2))
 %disp(x(2,1))
 
-% Agregamos condiciones de frontera
+%% Agregamos condiciones de frontera
 
 for j =2:n-1
     for k = 2:p-1
@@ -101,6 +101,7 @@ for i=2:m-1
     end
 end
 
+%%
 %%%%%%%%%% Características de la matriz %%%%%%%%%%%
 %C = cond(A);
 %fprintf('El número de condición es: ');
@@ -114,6 +115,8 @@ end
 %        disp (['Matrix A is diagonally-dominant']); 
 %end
 
+
+%%
 %%%%% Resolvemos el sistema lineal %%%%%%%%%%%%%%
 %tStart = cputime;
 %u = A\rhs;                        % Utiliza mldivide para resolver el sistema
@@ -143,7 +146,7 @@ tiempo = cputime - tStart;
 %tiempo = cputime - tStart;
 
 
-% Guardamos la solución
+%% Guardamos la solución
 utemp = reshape(u,m-2,n-2,p-2);        % Cambiamos de vector a matriz
 for i = 1:m
     for j = 1:n
@@ -166,11 +169,12 @@ phi_approx(2:(m-1),2:(n-1),2:(p-1)) = utemp;       % Se completa la matriz de ph
 %disp(phi_approx)
 %disp(x)
 %disp(y)
-% Calculamos la solucion exacta
+
+%% Calculamos la solucion exacta
 phi_exacta = phi(x,y,z);
 %disp(phi_exacta)
 
-% Graficamos la solución
+%% Graficamos la solución
 % scrsz = get(groot,'ScreenSize'); % Se obtienen los limites de la
 % figure('OuterPosition',[1 1 scrsz(3) scrsz(4)]);% Se crea la figura del
 % tamaño de
