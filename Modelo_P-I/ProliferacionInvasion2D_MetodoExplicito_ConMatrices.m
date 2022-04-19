@@ -1,3 +1,4 @@
+function [tiempo_sum,tiempo_Prom,tiempo_moda,rr] = ProliferacionInvasion2D_MetodoExplicito_ConMatrices(mx,ny)
 %%Modelo de proliferación-invasión 2D
 
 % c_t = Dif*(c_xx + c_yy) + g
@@ -21,7 +22,7 @@
 % Dif*dt*(c^(k)_(i,j+1) - 2*c^(k)_(i,j) + c^(k)_(i,j-1))/dy^2 + g^(k)_(i,j)
 
 %% Clear all variables
-clear; clc; clf;
+%clear; clc; clf;
 
 %% Inicialización de los parámetros
 
@@ -41,14 +42,14 @@ h = @(x,y) 4000;
 %Parámetros de discretización sobre el dominio del espacio
 M = 200;  %Tamaño del dominio sobre x
 N = 200;  %Tamaño del dominio sobre y
-mx = 30;  %Número de puntos para la discretización sobre x
-ny = 30;  %Número de puntos para la discretización sobre y
+%mx = 30;  %Número de puntos para la discretización sobre x
+%ny = 30;  %Número de puntos para la discretización sobre y
 dx = M/(mx+1);   %Distancia entre los puntos interiores sobre x
 dy = N/(ny+1);   %Distancia entre los puntos interiores sobre y
 
 %Parámetros de discretización sobre el dominio del tiempo
 T = 10;   %Tiempo total transcurrido (Número de días)
-dt = 0.01; %Tamaño de paso de tiempo;
+dt = 0.001; %Tamaño de paso de tiempo;
 
 %Condición de estabilidad
 if dt/dx >= 1/sqrt(2)     %para dx=dy     %dt/dx >= sqrt(3/8); 
@@ -65,8 +66,8 @@ y = linspace(0,N,ny+1);              % Se crea la malla espacial en y.
 
 % Condiciones de inicio  
 c = zeros(mx-1,ny-1);
-for i=(mx)/2:(mx)/2+5 %i=2:mx-1
-    for j=(ny)/2:(ny)/2+5  %j=2:ny-1
+for i=mx/5:(4*mx)/5   %2:mx-1
+    for j=(ny)/5:(4*ny)/5   %j=2:ny-1
         c(i,j) = h(x(i,j),y(i,j));
     end
 end
@@ -112,12 +113,12 @@ c_plot(:,ny) = b2(0);
 
 % Grafica en el tiempo 0;
 posPlot = 1;
-subplot(1,6,posPlot)
-surf(x,y,c_plot) 
-xlabel('x')
-ylabel('y')
-zlabel('z')
-title('c en el tiempo inicial')
+%subplot(1,6,posPlot)
+%surf(x,y,c_plot) 
+%xlabel('x')
+%ylabel('y')
+%zlabel('z')
+%title('c en el tiempo inicial')
 
 %% Creación de matrices
 % Para x
@@ -144,15 +145,24 @@ end
 %A = Ax+Ay;
 vc = reshape(c,(mx-1)*(ny-1),1); % Cambiamos de matriz a vector
 %% Iteraciones sobre el tiempo
+tiempo = zeros(T*1000,1);
+ti_aux=0;
 c_approx = zeros(mx+1,ny+1);
 dudt = zeros((mx-1)*(ny-1),1);
 for t=0:dt:T
     
+    
+    ti_aux = ti_aux + 1;
+    tStart = cputime;            % Toma de tiempos
     % Evaluación de las derivadas en el tiempo t
-    dudt = (dif/dx^2)*Ax*vc + (dif/dy^2)*Ay*vc + bc;
+    %dudt = (dif/dx^2)*Ax*vc + (dif/dy^2)*Ay*vc + bc;
     
     % Integración en el tiempo
-    vc = vc + dt*dudt;
+    %vc = vc + dt*dudt;
+    vc = vc + dt*((dif/dx^2)*Ax*vc + (dif/dy^2)*Ay*vc + bc);
+    tiempo(ti_aux) = cputime - tStart; % guardamos los tiempos
+    %fprintf('%6.3f %6.2f %12.12f\r\n', t, ti_aux, tiempo(ti_aux));
+    
     
     % Agregamos condiciones de frontera
     ctemp = reshape(vc,mx-1,ny-1); 
@@ -167,21 +177,26 @@ for t=0:dt:T
     c_approx(2:mx,2:ny) = ctemp;
     
     % Graficamos 
-    mdt = T/5;
-    csp = mod(t,mdt);
-    if csp == 0 && t ~= 0 && posPlot < 6
-        posPlot = posPlot +1;
-        subplot(1,6,posPlot)
-        surf(x,y,c_approx,'FaceAlpha',0.5)
-        xlabel('x')
-        ylabel('y')
-        zlabel('z')
-        title(['c en el tiempo ', num2str(t)])
-    end
+    %mdt = T/5;
+    %csp = mod(t,mdt);
+    %if csp == 0 && t ~= 0 && posPlot < 6
+    %    posPlot = posPlot +1;
+    %    subplot(1,6,posPlot)
+    %    surf(x,y,c_approx,'FaceAlpha',0.5)
+    %    xlabel('x')
+    %    ylabel('y')
+    %    zlabel('z')
+    %    title(['c en el tiempo ', num2str(t)])
+    %end
     
    
 end
-    
+   
+%fprintf('%12.8f\n', tiempo');
+tiempo_sum = sum(tiempo);       % Para hacer comparaciones de tiempos 
+tiempo_Prom = mean(tiempo);
+tiempo_moda = mode(tiempo);
+rr = unique(tiempo);
 % Grafica de resultados
 
 

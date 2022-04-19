@@ -1,4 +1,4 @@
-function [tiempo_prom,iter,error] = ProliferacionInvasion2D_MetodoImplicito(m,n)
+function [tiempo_sum,iter,error] = ProliferacionInvasion2D_MetodoImplicito(m,n)
 %%Modelo de proliferación-invasión 2D
 
 % c_t = Dif*(c_xx + c_yy) + g
@@ -50,7 +50,7 @@ dx = M/(mx+1);   %Distancia entre los puntos interiores sobre x
 dy = N/(ny+1);   %Distancia entre los puntos interiores sobre y
 
 %Parámetros de discretización sobre el dominio del tiempo
-T = 15;   %Tiempo total transcurrido (Número de días)
+T = 10;   %Tiempo total transcurrido (Número de días)
 dt = 0.1; %Tamaño de paso de tiempo;
 
 %Parámetros para la discretización
@@ -193,17 +193,17 @@ for t=0:dt:T
     tStart = cputime;
     %vc=linsolve(A_izq,vector_b);    % Método definido por Matlab
     %Método LU
-    %[L,U,P] = lu(A_izq);           % Factorizamos la matriz en una triangular inferior y una superior
-    %vM = L\(P*vector_b);                  % Resolvemos la matriz inferior
-    %vc = U\vM;
+    [L,U,P] = lu(A_izq);           % Factorizamos la matriz en una triangular inferior y una superior
+    vM = L\(P*vector_b);                  % Resolvemos la matriz inferior
+    vc = U\vM;
     %Método iterativo. Gauss-Seidel
     %addpath('C:\Users\Dell\Documents\Curso_Computo_Cientifico\Poisson\examples\metodos_iterativos');
     %[vc,num_iter,err] = GaussSeidel(A_izq,vector_b,vc,(mx-1)*(ny-1),1e-14,500);  %% Método implementado por mí
     %vc = Gauss_Siedel(A_izq,vector_b,vc,0.000001);   %% Implementación descargada de internet(https://www.mathworks.com/matlabcentral/fileexchange/73488-gauss-seidel-iterative-method)
-    [vc,fl,err,num_iter,rv] = pcg(A_izq,vector_b,1e-14,500);
+    %[vc,fl,err,num_iter,rv] = pcg(A_izq,vector_b,1e-14,500);
     tiempo(t_aux) = cputime - tStart;
-    iteraTotal(t_aux) = num_iter;
-    err_Total(t_aux) = err;
+    %iteraTotal(t_aux) = num_iter;
+    %err_Total(t_aux) = err;
     
    
     % Agregamos condiciones de frontera
@@ -237,7 +237,10 @@ for t=0:dt:T
    
 end
 
-tiempo_prom = mean(tiempo);   
+%tiempo_prom = mean(tiempo);    % Para hacer comparaciones de tiempos
+%promedios don diferentes métodos numéricos
+tiempo_sum = sum(tiempo);       % Para hacer comparaciones de tiempos 
+%totales entre método explicito e implicito
 iter = mode(iteraTotal);
 error = mean(err_Total);
 end

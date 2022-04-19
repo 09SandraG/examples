@@ -46,7 +46,7 @@ while (k<=maxit) && (err > tol)
     k=k+1;
     x0 = x_approx;
 end
-fprintf('Despues de %3.0f iteraciones el error de la aproximación es: %3.6e\n',k-1,err);
+%fprintf('Despues de %3.0f iteraciones el error de la aproximación es: %3.6e\n',k-1,err);
 num_iters = k-1;
 %disp(k)
 end
